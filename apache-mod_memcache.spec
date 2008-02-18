@@ -4,7 +4,7 @@
 %define mod_conf B10_%{mod_name}.conf
 %define mod_so %{mod_name}.so
 
-Summary:	Mod_memcache is a DSO module for the apache Web server
+Summary:	DSO module for the apache Web server
 Name:		apache-%{mod_name}
 Version:	0.1.0
 Release:	%mkrel 2
