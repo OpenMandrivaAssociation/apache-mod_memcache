@@ -37,7 +37,7 @@ cp %{SOURCE1} %{mod_conf}
 %build
 export CPPFLAGS="-I%{_includedir}/apr_memcache-0"
 
-%configure2_5x \
+%configure2_5x --localstatedir=/var/lib \
     --with-apr-memcache=%{_prefix} \
     --with-apxs=%{_sbindir}/apxs
 
