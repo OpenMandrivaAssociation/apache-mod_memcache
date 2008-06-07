@@ -7,12 +7,13 @@
 Summary:	DSO module for the apache Web server
 Name:		apache-%{mod_name}
 Version:	0.1.0
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		System/Servers
 License:	Apache License
 URL:		http://code.google.com/p/modmemcache/
 Source0:	http://modmemcache.googlecode.com/files/mod_memcache-%{version}.tar.gz
 Source1:	%{mod_conf}
+Patch0:		mod_memcache-apu13.diff
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires(pre):  apache-conf >= %{apache_version}
@@ -20,7 +21,8 @@ Requires(pre):  apache >= %{apache_version}
 Requires:	apache-conf >= %{apache_version}
 Requires:	apache >= %{apache_version}
 BuildRequires:  apache-devel >= %{apache_version}
-BuildRequires:  apu-util-devel >= 1.3.0
+BuildRequires:  apr-util-devel >= 1.3.0
+BuildRequires:  libtool
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -31,11 +33,15 @@ object.
 %prep
 
 %setup -q -n %{mod_name}-%{version}
+%patch0 -p0
 
 cp %{SOURCE1} %{mod_conf}
 
 %build
-export CPPFLAGS="-I%{_includedir}/apr_memcache-0"
+rm -f configure
+libtoolize --copy --force; aclocal -I m4; autoconf; automake --add-missing --copy --foreign; autoconf
+
+export CPPFLAGS="`apu-1-config --includes`"
 
 %configure2_5x --localstatedir=/var/lib \
     --with-apr-memcache=%{_prefix} \
